@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "mspOfferName": {
+            "value": "mspOfferName"
+        },
+        "mspOfferDescription": {
+            "value": "mspOfferDescription"
+        },
+        "managedByTenantId": {
+            "value": "c0dd9f30-fcdc-4e3a-ab68-5c06559764d1"
+        },
+        "authorizations": {
+            "value": [
+                        { 
+                            "principalId": "3aba3963-4d30-4e23-98a3-a588ea4de53e", 
+                            "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                            "principalIdDisplayName": "Lighthouse_Contributor" 
+                        }, 
+                        { 
+                            "principalId": "3aba3963-4d30-4e23-98a3-a588ea4de53e", 
+                            "roleDefinitionId": "4d97b98b-1d4f-4787-a291-c67834d212e7",
+                            "principalIdDisplayName": "Lighthouse_Network_Contributor"
+                            
+                        }
+                        // {
+                        //     "principalId": "ee8f6d35-15f2-4252-b1b8-591358e8a244",
+                        //     "principalIdDisplayName": "PIM_Group",
+                        //     "roleDefinitionId": "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9",
+                        //     "delegatedRoleDefinitionIds": [
+                        //         "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                        //         "92aaf0da-9dab-42b6-94a3-d43ce8d16293"
+                        //     ]
+                        // }
+                    ]
+                }                
+        }
+}

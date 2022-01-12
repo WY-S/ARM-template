@@ -1,0 +1,31 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "mspOfferName": {
+            "value": "mspOfferName"
+        },
+        "mspOfferDescription": {
+            "value": "mspOfferDescription"
+        },
+        "managedByTenantId": {
+            "value": "e4c9ab4e-bd27-40d5-8459-230ba2a757fb"
+        },
+        "authorizations": {
+            "value": [
+                        { 
+                            "principalId": "202b56d4-c7bc-4fa5-910d-20c3971a84b6", 
+                            "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                            "principalIdDisplayName": "Lighthouse_Contributor" 
+                        }, 
+                        { 
+                            "principalId": "202b56d4-c7bc-4fa5-910d-20c3971a84b6", 
+                            "roleDefinitionId": "4d97b98b-1d4f-4787-a291-c67834d212e7",
+                            "principalIdDisplayName": "Lighthouse_Network_Contributor"
+                            
+                        }
+
+                    ]
+                }                
+        }
+}

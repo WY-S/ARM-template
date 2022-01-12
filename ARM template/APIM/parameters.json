@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "apimName": {
+            "value": "testapim002"
+        },
+        "tier": {
+            "value": "Developer"
+        },
+		"location": {
+			"value": "eastus"
+		},
+		"organizationName": {
+			"value": "Consumer Data Right (CDR)"
+		},
+		"adminEmail": {
+			"value": "wenyis@wicresoft.com"
+		},
+		"appInsightsName": {
+			"value": "testapplicat"
+		},
+		"appInsightsInstrumentationKey": {
+			"value": "101131f4-32e6-4761-9b14-20324e409d92"
+		},
+		"capacity": {
+			"value": "1"
+		},
+		"virtualNetworkType": {
+			"value": "Internal"
+        },
+        "vnetResourceGroup": {
+			"value": "aaa_test"
+        },
+        "vnetName": {
+			"value": "vnet002"
+        },
+        "subnetName": {
+			"value": "apimsub"
+        },
+		"hostName": {
+			"value": "apim.dev.cdr.gov.au"
+		},
+		"keyVaultId": {
+			"value": "https://cdr-kv01.vault.azure.net/secrets/apim-dev-cdr-gov-au"
+		},
+		"certificateExpiry": {
+			"value": "2021-12-01T12:00:00+00:00"
+		},
+		"certificateThumbprint": {
+			"value": "D78B09A59299CB9D7BDE065E89CD99F930F85CA3"
+		},
+		"certificateSubject": {
+			"value": "CN=apim.dev.cdr.gov.au, O=Australian Competition and Consumer Commission, L=Canberra, S=Australian Capital Territory, C=AU"
+		},
+		"deployCustomHostname": {
+			"value": false
+		}
+    }
+}

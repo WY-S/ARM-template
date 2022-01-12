@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "resources": [{
+  "name": "wenyi",
+  "type": "Microsoft.Authorization/policyExemptions",
+  "apiVersion": "2020-07-01-preview",
+  "properties": {
+    "policyAssignmentId": "/subscriptions/4f27bec7-26bd-40f7-af24-5962a53d921e/providers/Microsoft.Authorization/policyAssignments/0719a16c624a476d885fcfcc",
+    "exemptionCategory": "waiver",
+    "expiresOn": "2021-12-31T23:59:00.0000000Z",
+    "displayName": "Wenyitest",
+    "description": "None",
+    "metadata": {
+        "requestedBy": "Storage team",
+        "approvedBy": "IA",
+        "approvedOn": "2020-07-26T08:02:32.0000000Z",
+        "ticketRef": "4baf214c-8d54-4646-be3f-eb6ec7b9bc4f"
+    }
+  }
+}]
+}

@@ -1,0 +1,156 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+	"contentVersion": "1.0.0.1",
+	"parameters": {
+		"rgName": {
+			"type": "string",
+			"defaultValue": "moshitestnested",
+			"metadata": {
+				"description": "Resource Group name"
+			}
+		},
+		"rgLocation": {
+			"type": "string",
+			"defaultValue": "australiaeast",
+			"allowedValues": [
+				"australiaeast",
+				"australiasoutheast"
+			],
+			"metadata": {
+				"description": "Resource Group Location"
+			}
+		},
+		"environmentType": {
+			"type": "string",
+			"defaultValue": "prod",
+			"allowedValues": [
+				"test",
+				"cert",
+				"prod"
+			],
+			"metadata": {
+				"description": "Environment type to be deployed (Production, CErtification or Test"
+			}
+		},
+		"productLine": {
+			"type": "string",
+			"defaultValue": "FeederServicePS",
+			"metadata": {
+				"description": "Name of the product for which the environment/resources are deployed"
+			}
+		},
+		"productOwner": {
+			"type": "string",
+			"defaultValue": "MOH",
+			"metadata": {
+				"description": "Owner of the product for which the environment/resources are deployed"
+			}
+		},
+		"tagsList": {
+			"type": "object",
+			"defaultValue": {
+				"wtl_environment": "[parameters('environmentType')]",
+				"wtl_product_line": "[parameters('productLine')]",
+				"wtl_product_owner": "[parameters('productOwner')]"
+			}
+		},
+		"principalId": {
+			"type": "string",
+			"defaultValue": "8a8c0a08-53bd-4982-aba9-4862170d0116",
+			"metadata": {
+				"description": "Azure_NZEPS_Feeder_FirstLineSupport AD Group's ObjectID for which Contributor access to be enabled, in order to enable deployment of the Azure Environment."
+			}
+		},
+		"builtInRoleType": {
+			"type": "string",
+			"allowedValues": [
+				"Owner",
+				"Contributor",
+				"Reader"
+			],
+			"defaultValue": "Contributor",
+			"metadata": {
+				"description": "Built-in role to assign"
+			}
+		}
+	},
+	"variables": {
+		"ResourceGroupName": "[concat(toLower(parameters('productLine')), '-' , parameters('environmentType') ,'-rg')]",
+		"Owner": "[concat(subscription().id, '/providers/Microsoft.Authorization/roleDefinitions/', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')]",
+		"Contributor": "[concat(subscription().id, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+		"Reader": "[concat(subscription().id, '/providers/Microsoft.Authorization/roleDefinitions/', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')]"
+	},
+	"resources": [
+		{
+			"type": "Microsoft.Resources/resourceGroups",
+			"apiVersion": "2018-05-01",
+			"location": "[parameters('rgLocation')]",
+			"name": "[parameters('rgName')]",
+			"tags": "[parameters('tagsList')]",
+			"properties": {}
+		},
+		{
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"name": "assignLock",
+			"resourceGroup": "[parameters('rgName')]",
+			"dependsOn": [
+				"[parameters('rgName')]"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"template": {
+					"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+					"contentVersion": "1.0.0.0",
+					"parameters": {},
+					"variables": {},
+					"resources": [
+						{
+							"name": "DontDelete",
+							"type": "Microsoft.Authorization/locks",
+							"apiVersion": "2017-04-01",
+							"condition": "[equals(parameters('environmentType'),'prod')]",
+							"properties": {
+								"level": "CanNotDelete",
+								"notes": "Prevent deletion of the resourceGroup"
+							}
+						}
+					],
+					"outputs": {}
+				}
+			}
+		},
+		{
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"name": "assignRole",
+			"resourceGroup": "[parameters('rgName')]",
+			"dependsOn": [
+				"[parameters('rgName')]"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"template": {
+					"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+					"contentVersion": "1.0.0.0",
+					"parameters": {},
+					"variables": {},
+					"resources": [
+						{
+							"type": "Microsoft.Authorization/roleAssignments",
+							"name": "[guid(parameters('principalId'), parameters('rgName'))]",
+							"apiVersion": "2017-09-01",
+							"properties": {
+								"roleDefinitionId": "[variables(parameters('builtInRoleType'))]",
+								"principalId": "[parameters('principalId')]",
+								"scope": "[concat(subscription().id, '/resourceGroups/', parameters('rgName'))]"
+							}
+						}
+					],
+					"outputs": {}
+				}
+			}
+		}
+	],
+	"outputs": {}
+}

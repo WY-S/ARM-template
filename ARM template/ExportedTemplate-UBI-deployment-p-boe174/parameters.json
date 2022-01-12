@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "kundenkuerzel": {
+            "value": "boe"
+        },
+        "environmentNumber": {
+            "value": "174"
+        },
+        "analysis_Service_Admin_Account": {
+            "value": "stephan.fehrmann@gob.de"
+        },
+        "targitAppID": {
+            "value": "eaee6f62-dd6d-4ed1-8f3a-bc9098d7e775"
+        },
+        "targitTenantID": {
+            "value": "4c0bcf04-6642-47bc-a559-48c48e9f326f"
+        },
+        "analysis_Services_Tarif": {
+            "value": "S0"
+        },
+        "sqL_Server_SA_Password": {
+            "value": null
+        },
+        "umgebungstyp": {
+            "value": "p"
+        },
+        "navDatenbankPWDE": {
+            "value": null
+        },
+        "navDatenbankPWAT": {
+            "value": null
+        },
+        "navDatenbankPWCH": {
+            "value": null
+        },
+        "setupIP": {
+            "value": "93.244.95.197"
+        }
+    }
+}

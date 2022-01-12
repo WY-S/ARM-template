@@ -1,0 +1,333 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.613.9944",
+      "templateHash": "17659596805006929760"
+    }
+  },
+  "parameters": {
+    "resourceGroups": {
+      "type": "array",
+      "metadata": {
+        "description": "Resource Groups definition to deploy resources to."
+      }
+    },
+    "deploymentLocation": {
+      "type": "string",
+      "defaultValue": "[deployment().location]",
+      "metadata": {
+        "description": "The location of the deployment."
+      }
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {},
+      "metadata": {
+        "description": "Specify tags that should be assigned to the deployed resources. Tags are needed for proper usage and billing handling."
+      }
+    },
+    "solutionVersionTag": {
+      "type": "object",
+      "defaultValue": {},
+      "metadata": {
+        "description": "The version of this solution in the form of tag. This parameter is specified usually by lz-deployment-script (deploy.ps1)."
+      }
+    }
+  },
+  "functions": [],
+  "variables": {
+    "allTags": "[union(parameters('tags'), parameters('solutionVersionTag'))]",
+    "defaultResourceGroupObject": {
+      "tags": {},
+      "create": true,
+      "storageSyncServices": []
+    }
+  },
+  "resources": [
+    {
+      "condition": "[union(variables('defaultResourceGroupObject'), parameters('resourceGroups')[copyIndex()]).create]",
+      "copy": {
+        "name": "resourceGroupsRes",
+        "count": "[length(parameters('resourceGroups'))]"
+      },
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2021-04-01",
+      "name": "[parameters('resourceGroups')[copyIndex()].name]",
+      "location": "[parameters('resourceGroups')[copyIndex()].location]",
+      "tags": "[union(variables('allTags'), union(variables('defaultResourceGroupObject'), parameters('resourceGroups')[copyIndex()]).tags)]",
+      "properties": {}
+    },
+    {
+      "copy": {
+        "name": "storageSyncServices",
+        "count": "[length(parameters('resourceGroups'))]"
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "[format('storageSyncServices-{0}', copyIndex())]",
+      "resourceGroup": "[parameters('resourceGroups')[copyIndex()].name]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "storageSyncServices": {
+            "value": "[union(variables('defaultResourceGroupObject'), parameters('resourceGroups')[copyIndex()]).storageSyncServices]"
+          },
+          "tags": {
+            "value": "[union(variables('allTags'), union(variables('defaultResourceGroupObject'), parameters('resourceGroups')[copyIndex()]).tags)]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.613.9944",
+              "templateHash": "15193967312006492386"
+            }
+          },
+          "parameters": {
+            "storageSyncServices": {
+              "type": "array"
+            },
+            "tags": {
+              "type": "object"
+            }
+          },
+          "functions": [],
+          "variables": {
+            "defaultStorageSyncService": {
+              "incomingTrafficPolicy": "AllowAllTraffic",
+              "syncGroups": [],
+              "tags": {}
+            }
+          },
+          "resources": [
+            {
+              "copy": {
+                "name": "storageSyncServiceRes",
+                "count": "[length(parameters('storageSyncServices'))]"
+              },
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2019-10-01",
+              "name": "[format('storeageSyncService-{0}-{1}', uniqueString(resourceGroup().name), copyIndex())]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "storageSyncService": {
+                    "value": "[union(variables('defaultStorageSyncService'), parameters('storageSyncServices')[copyIndex()])]"
+                  },
+                  "tags": {
+                    "value": "[union(parameters('tags'), union(variables('defaultStorageSyncService'), parameters('storageSyncServices')[copyIndex()]).tags)]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.4.613.9944",
+                      "templateHash": "6377818335817387519"
+                    }
+                  },
+                  "parameters": {
+                    "storageSyncService": {
+                      "type": "object"
+                    },
+                    "tags": {
+                      "type": "object"
+                    }
+                  },
+                  "functions": [],
+                  "variables": {
+                    "defaultSyncGroupObject": {
+                      "cloudEndpoint": {
+                        "storageAccountSubscriptionId": "[subscription().subscriptionId]",
+                        "storageAccountName": ""
+                      },
+                      "serverEndpoints": []
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.StorageSync/storageSyncServices",
+                      "apiVersion": "2020-09-01",
+                      "name": "[parameters('storageSyncService').name]",
+                      "location": "[resourceGroup().location]",
+                      "tags": "[parameters('tags')]",
+                      "properties": {
+                        "incomingTrafficPolicy": "[parameters('storageSyncService').incomingTrafficPolicy]"
+                      }
+                    },
+                    {
+                      "copy": {
+                        "name": "syncGroups",
+                        "count": "[length(parameters('storageSyncService').syncGroups)]"
+                      },
+                      "type": "Microsoft.Resources/deployments",
+                      "apiVersion": "2019-10-01",
+                      "name": "[format('syncGroup-{0}-{1}', uniqueString(parameters('storageSyncService').name), copyIndex())]",
+                      "properties": {
+                        "expressionEvaluationOptions": {
+                          "scope": "inner"
+                        },
+                        "mode": "Incremental",
+                        "parameters": {
+                          "storageSyncServiceName": {
+                            "value": "[parameters('storageSyncService').name]"
+                          },
+                          "syncGroup": {
+                            "value": "[union(variables('defaultSyncGroupObject'), parameters('storageSyncService').syncGroups[copyIndex()])]"
+                          }
+                        },
+                        "template": {
+                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                          "contentVersion": "1.0.0.0",
+                          "metadata": {
+                            "_generator": {
+                              "name": "bicep",
+                              "version": "0.4.613.9944",
+                              "templateHash": "8913265806051567595"
+                            }
+                          },
+                          "parameters": {
+                            "syncGroup": {
+                              "type": "object"
+                            },
+                            "storageSyncServiceName": {
+                              "type": "string"
+                            }
+                          },
+                          "functions": [],
+                          "variables": {
+                            "defaultServerEndpointObject": {
+                              "registeredServerName": "",
+                              "cloudTieringEnabled": true,
+                              "tierFilesOlderThan": 30,
+                              "minimumFreeSpace": 20,
+                              "initialSyncPolicy": "MergeNamespaceThenFiles",
+                              "offlineFileTransferEnabled": false,
+                              "offlineFileTransferShareName": ""
+                            }
+                          },
+                          "resources": [
+                            {
+                              "type": "Microsoft.StorageSync/storageSyncServices/syncGroups",
+                              "apiVersion": "2020-09-01",
+                              "name": "[format('{0}/{1}', parameters('storageSyncServiceName'), parameters('syncGroup').name)]",
+                              "properties": {}
+                            },
+                            {
+                              "condition": "[not(empty(parameters('syncGroup').cloudEndpoint.storageAccountName))]",
+                              "type": "Microsoft.StorageSync/storageSyncServices/syncGroups/cloudEndpoints",
+                              "apiVersion": "2020-09-01",
+                              "name": "[format('{0}/{1}/{2}', parameters('storageSyncServiceName'), parameters('syncGroup').name, if(not(empty(parameters('syncGroup').cloudEndpoint.storageAccountName)), parameters('syncGroup').cloudEndpoint.storageAccountName, 'dummy'))]",
+                              "properties": {
+                                "storageAccountResourceId": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', parameters('syncGroup').cloudEndpoint.storageAccountSubscriptionId, parameters('syncGroup').cloudEndpoint.storageAccountResourceGroup), 'Microsoft.Storage/storageAccounts', parameters('syncGroup').cloudEndpoint.storageAccountName)]",
+                                "azureFileShareName": "[parameters('syncGroup').cloudEndpoint.shareName]",
+                                "storageAccountTenantId": "[subscription().tenantId]",
+                                "friendlyName": "[format('{0} \\ {1}', parameters('syncGroup').cloudEndpoint.storageAccountName, parameters('syncGroup').cloudEndpoint.shareName)]"
+                              },
+                              "dependsOn": [
+                                "[resourceId('Microsoft.StorageSync/storageSyncServices/syncGroups', parameters('storageSyncServiceName'), parameters('syncGroup').name)]"
+                              ]
+                            },
+                            {
+                              "copy": {
+                                "name": "serverEndpoints",
+                                "count": "[length(parameters('syncGroup').serverEndpoints)]"
+                              },
+                              "type": "Microsoft.Resources/deployments",
+                              "apiVersion": "2019-10-01",
+                              "name": "[format('serverEndpoint-{0}-{1}', uniqueString(parameters('syncGroup').name), copyIndex())]",
+                              "properties": {
+                                "expressionEvaluationOptions": {
+                                  "scope": "inner"
+                                },
+                                "mode": "Incremental",
+                                "parameters": {
+                                  "storageSyncServiceName": {
+                                    "value": "[parameters('storageSyncServiceName')]"
+                                  },
+                                  "serverEndpoint": {
+                                    "value": "[union(variables('defaultServerEndpointObject'), parameters('syncGroup').serverEndpoints[copyIndex()])]"
+                                  },
+                                  "syncGroupName": {
+                                    "value": "[parameters('syncGroup').name]"
+                                  }
+                                },
+                                "template": {
+                                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                                  "contentVersion": "1.0.0.0",
+                                  "metadata": {
+                                    "_generator": {
+                                      "name": "bicep",
+                                      "version": "0.4.613.9944",
+                                      "templateHash": "328012658622003476"
+                                    }
+                                  },
+                                  "parameters": {
+                                    "serverEndpoint": {
+                                      "type": "object"
+                                    },
+                                    "syncGroupName": {
+                                      "type": "string"
+                                    },
+                                    "storageSyncServiceName": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "functions": [],
+                                  "resources": [
+                                    {
+                                      "type": "Microsoft.StorageSync/storageSyncServices/syncGroups/serverEndpoints",
+                                      "apiVersion": "2020-09-01",
+                                      "name": "[format('{0}/{1}/{2}', parameters('storageSyncServiceName'), parameters('syncGroupName'), parameters('serverEndpoint').registeredServerName)]",
+                                      "properties": {
+                                        "serverLocalPath": "[parameters('serverEndpoint').localPath]",
+                                        "cloudTiering": "[if(parameters('serverEndpoint').cloudTieringEnabled, 'on', 'off')]",
+                                        "volumeFreeSpacePercent": "[parameters('serverEndpoint').minimumFreeSpace]",
+                                        "tierFilesOlderThanDays": "[parameters('serverEndpoint').tierFilesOlderThan]",
+                                        "friendlyName": "[reference(resourceId('Microsoft.StorageSync/storageSyncServices/registeredServers', parameters('storageSyncServiceName'), parameters('serverEndpoint').registeredServerName), '2020-09-01').friendlyName]",
+                                        "serverResourceId": "[resourceId('Microsoft.StorageSync/storageSyncServices/registeredServers', parameters('storageSyncServiceName'), parameters('serverEndpoint').registeredServerName)]",
+                                        "initialUploadPolicy": "[if(or(equals(toLower(parameters('serverEndpoint').initialSyncPolicy), 'overwrite'), equals(toLower(parameters('serverEndpoint').initialSyncPolicy), 'serveralreadysynced')), 'ServerAuthoritative', 'Merge')]",
+                                        "initialDownloadPolicy": "[if(equals(toLower(parameters('serverEndpoint').initialSyncPolicy), 'avoidtieredfiles'), 'AvoidTieredFiles', if(or(equals(toLower(parameters('serverEndpoint').initialSyncPolicy), 'namespaceonly'), equals(toLower(parameters('serverEndpoint').initialSyncPolicy), 'serveralreadysynced')), 'NamespaceOnly', 'NamespaceThenModifiedFiles'))]",
+                                        "localCacheMode": "UpdateLocallyCachedFiles",
+                                        "offlineDataTransfer": "[if(parameters('serverEndpoint').offlineFileTransferEnabled, 'on', 'off')]",
+                                        "offlineDataTransferShareName": "[parameters('serverEndpoint').offlineFileTransferShareName]"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.StorageSync/storageSyncServices', parameters('storageSyncService').name)]"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('resourceGroups')[copyIndex()].name)]"
+      ]
+    }
+  ]
+}

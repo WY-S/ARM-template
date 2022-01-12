@@ -1,0 +1,204 @@
+Extension: HubsExtension
+fKt0gvn_BaPN.js:340 Version: 8.26.0.5 (production#d5e0d88429.210611-0936) Signed
+Session: fe09c9d7d3c84d36bf85f50f6d02ee3a
+28d7f436-6ac7-43c4-86df-7b15f6c26204:1 Extension: Microsoft_Azure_CustomerHub
+28d7f436-6ac7-43c4-86df-7b15f6c26204:1 Extension: Microsoft_Azure_Support
+​ Extension: Microsoft_Azure_Marketplace
+​ Extension: Microsoft_AAD_IAM
+​ Extension: Microsoft_Azure_Billing
+​ Extension: Microsoft_Azure_Marketplace
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:07:47 AM ProfileData Support profile request was failed. _errorData: undefined
+_sourceErrorLevel: undefined
+baseTypes: ["MsPortalFx.Errors.AjaxError","MsPortalFx.Errors.Error"]
+code: undefined
+data: {"uri":"https://pac.support.ext.azure.com/api/v1/supportProfile","type":"GET","pathAndQuery":"","requestId":"f05646b9-5522-483b-9121-fb7ea5f9b012","failureCause":"","sessionId":"fe09c9d7d3c84d36bf85f50f6d02ee3a","status":0,"statusText":"timeout","duration":10010.40000000596}
+errorLevel: 0
+errorThrown: timeout
+extension: Microsoft_Azure_Support
+handled: undefined
+innerErrors: []
+jqXHR: {"readyState":0,"status":0,"statusText":"timeout"}
+message: ajaxExtended call failed
+name: Error
+source: undefined
+stack: null
+textStatus: timeout
+timestamp: 327380
+type: MsPortalFx.Errors.AjaxError
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:08:10 AM SubscriptionAdminInfoService Failed to get subscription classic admin role names info [TrackingId=4460771d-a000-4f25-a7b5-f26f8fb30f27] message: Cannot read property 'value' of null
+stack: TypeError: Cannot read property 'value' of null
+    at n.<anonymous> (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:106:848)
+    at s (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:2614)
+    at Object.next (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1907)
+    at o (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1680)
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:08:29 AM SubscriptionAdminInfoService Failed to get subscription classic admin role names info [TrackingId=4460771d-a000-4f25-a7b5-f26f8fb30f27] message: Cannot read property 'value' of null
+stack: TypeError: Cannot read property 'value' of null
+    at n.<anonymous> (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:106:848)
+    at s (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:2614)
+    at Object.next (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1907)
+    at o (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1680)
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+uyYvEeA5RKSJ.js:10 [Microsoft_Azure_Support]  3:10:04 AM MsPortalFx/Base/Base.Net 1 Base.Net: readyState: 4
+responseJSON: {"Error":{"Code":"InternalServerError","Message":"An internal server error occurred while processing the operation."}}
+responseText: {"Error":{"Code":"InternalServerError","Message":"An internal server error occurred while processing the operation."}}
+status: 500
+statusText: error
+ Object
+r @ uyYvEeA5RKSJ.js:10
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:04 AM CloudSolutionProviderData Failed to fetch CSP Partner info. _errorData: undefined
+_sourceErrorLevel: undefined
+baseTypes: ["MsPortalFx.Errors.AjaxError","MsPortalFx.Errors.Error"]
+code: undefined
+data: {"uri":"https://pac.support.ext.azure.com/api/v1/cloudSolutionProvider/partner?subscriptionId=58c033ae-01cf-4338-b86c-cf49aec827ae","type":"GET","pathAndQuery":"","requestId":"f05646b9-5522-483b-9121-fb7ea5f9b042","failureCause":"","sessionId":"fe09c9d7d3c84d36bf85f50f6d02ee3a","status":500,"statusText":"error","duration":1852.6000000089407}
+errorLevel: 2
+errorThrown: 
+extension: Microsoft_Azure_Support
+handled: undefined
+innerErrors: []
+jqXHR: {"readyState":4,"responseText":"{\"Error\":{\"Code\":\"InternalServerError\",\"Message\":\"An internal server error occurred while processing the operation.\"}}","responseJSON":{"Error":{"Code":"InternalServerError","Message":"An internal server error occurred while processing the operation."}},"status":500,"statusText":"error"}
+message: ajaxExtended call failed
+name: Error
+source: undefined
+stack: null
+textStatus: error
+timestamp: 464610.299999997
+type: MsPortalFx.Errors.AjaxError
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:14 AM NewSupportRequestV3Blade Error in saving customer inputs on previous step click [TrackingId=4460771d-a000-4f25-a7b5-f26f8fb30f27] message: Cannot read property 'deeplinkBasicsStepResult' of undefined
+stack: TypeError: Cannot read property 'deeplinkBasicsStepResult' of undefined
+    at n.processDetailsStepResults (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:85:9594)
+    at t._receiveStepResults (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:229:13055)
+    at t._saveCustomerContext (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:229:11256)
+    at t._onStepClick (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:229:9540)
+    at n.callback (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:229:16249)
+    at Function.notifySubscribers (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:52:1589)
+    at Function.di.notifySubscribers (https://portal.azure.com/Content/Dynamic/uyYvEeA5RKSJ.js:35:17633)
+    at Function.evaluateImmediate_CallReadWithDependencyDetection (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:52:10175)
+    at Function.evaluateImmediate (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:52:9481)
+    at Function.evaluatePossiblyAsync (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:52:9085)
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:16 AM ProfileData Support profile request was failed. _errorData: undefined
+_sourceErrorLevel: undefined
+baseTypes: ["MsPortalFx.Errors.AjaxError","MsPortalFx.Errors.Error"]
+code: undefined
+data: {"uri":"https://pac.support.ext.azure.com/api/v1/supportProfile","type":"GET","pathAndQuery":"","requestId":"f05646b9-5522-483b-9121-fb7ea5f9b012","failureCause":"","sessionId":"fe09c9d7d3c84d36bf85f50f6d02ee3a","status":0,"statusText":"timeout","duration":10010.40000000596}
+errorLevel: 0
+errorThrown: timeout
+extension: Microsoft_Azure_Support
+handled: undefined
+innerErrors: []
+jqXHR: {"readyState":0,"status":0,"statusText":"timeout"}
+message: ajaxExtended call failed
+name: Error
+source: undefined
+stack: null
+textStatus: timeout
+timestamp: 327380
+type: MsPortalFx.Errors.AjaxError
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:20 AM SubscriptionAdminInfoService Failed to get subscription classic admin role names info [TrackingId=4460771d-a000-4f25-a7b5-f26f8fb30f27] message: Cannot read property 'value' of null
+stack: TypeError: Cannot read property 'value' of null
+    at n.<anonymous> (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:106:848)
+    at s (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:2614)
+    at Object.next (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1907)
+    at o (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1680)
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:30 AM SubscriptionAdminInfoService Failed to get subscription classic admin role names info [TrackingId=4460771d-a000-4f25-a7b5-f26f8fb30f27] message: Cannot read property 'value' of null
+stack: TypeError: Cannot read property 'value' of null
+    at n.<anonymous> (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:106:848)
+    at s (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:2614)
+    at Object.next (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1907)
+    at o (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1680)
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+uyYvEeA5RKSJ.js:10 [Microsoft_Azure_Support]  3:10:45 AM MsPortalFx/Base/Base.Net 1 Base.Net: readyState: 4
+responseJSON: {"Error":{"Code":"InternalServerError","Message":"An internal server error occurred while processing the operation."}}
+responseText: {"Error":{"Code":"InternalServerError","Message":"An internal server error occurred while processing the operation."}}
+status: 500
+statusText: error
+ Object
+r @ uyYvEeA5RKSJ.js:10
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:45 AM CloudSolutionProviderData Failed to fetch CSP Partner info. _errorData: undefined
+_sourceErrorLevel: undefined
+baseTypes: ["MsPortalFx.Errors.AjaxError","MsPortalFx.Errors.Error"]
+code: undefined
+data: {"uri":"https://pac.support.ext.azure.com/api/v1/cloudSolutionProvider/partner?subscriptionId=ea55a84f-b7cd-4f96-9691-48ea3c6110b8","type":"GET","pathAndQuery":"","requestId":"f05646b9-5522-483b-9121-fb7ea5f9b065","failureCause":"","sessionId":"fe09c9d7d3c84d36bf85f50f6d02ee3a","status":500,"statusText":"error","duration":1093.8999999910593}
+errorLevel: 2
+errorThrown: 
+extension: Microsoft_Azure_Support
+handled: undefined
+innerErrors: []
+jqXHR: {"readyState":4,"responseText":"{\"Error\":{\"Code\":\"InternalServerError\",\"Message\":\"An internal server error occurred while processing the operation.\"}}","responseJSON":{"Error":{"Code":"InternalServerError","Message":"An internal server error occurred while processing the operation."}},"status":500,"statusText":"error"}
+message: ajaxExtended call failed
+name: Error
+source: undefined
+stack: null
+textStatus: error
+timestamp: 506225.799999997
+type: MsPortalFx.Errors.AjaxError
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:52 AM NewSupportRequestV3Blade Error in saving customer inputs on previous step click [TrackingId=4460771d-a000-4f25-a7b5-f26f8fb30f27] message: Cannot read property 'deeplinkBasicsStepResult' of undefined
+stack: TypeError: Cannot read property 'deeplinkBasicsStepResult' of undefined
+    at n.processDetailsStepResults (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:85:9594)
+    at t._receiveStepResults (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:229:13055)
+    at t._saveCustomerContext (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:229:11256)
+    at t._onStepClick (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:229:9540)
+    at n.callback (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:229:16249)
+    at Function.notifySubscribers (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:52:1589)
+    at Function.di.notifySubscribers (https://portal.azure.com/Content/Dynamic/uyYvEeA5RKSJ.js:35:17633)
+    at Function.evaluateImmediate_CallReadWithDependencyDetection (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:52:10175)
+    at Function.evaluateImmediate (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:52:9481)
+    at Function.evaluatePossiblyAsync (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:52:9085)
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:54 AM ProfileData Support profile request was failed. _errorData: undefined
+_sourceErrorLevel: undefined
+baseTypes: ["MsPortalFx.Errors.AjaxError","MsPortalFx.Errors.Error"]
+code: undefined
+data: {"uri":"https://pac.support.ext.azure.com/api/v1/supportProfile","type":"GET","pathAndQuery":"","requestId":"f05646b9-5522-483b-9121-fb7ea5f9b012","failureCause":"","sessionId":"fe09c9d7d3c84d36bf85f50f6d02ee3a","status":0,"statusText":"timeout","duration":10010.40000000596}
+errorLevel: 0
+errorThrown: timeout
+extension: Microsoft_Azure_Support
+handled: undefined
+innerErrors: []
+jqXHR: {"readyState":0,"status":0,"statusText":"timeout"}
+message: ajaxExtended call failed
+name: Error
+source: undefined
+stack: null
+textStatus: timeout
+timestamp: 327380
+type: MsPortalFx.Errors.AjaxError
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13 [Microsoft_Azure_Support]  3:10:56 AM SubscriptionAdminInfoService Failed to get subscription classic admin role names info [TrackingId=4460771d-a000-4f25-a7b5-f26f8fb30f27] message: Cannot read property 'value' of null
+stack: TypeError: Cannot read property 'value' of null
+    at n.<anonymous> (https://afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/nlaz0cy33Fmn.js:106:848)
+    at s (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:2614)
+    at Object.next (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1907)
+    at o (https://portal.azure.com/Content/Dynamic/wOh11kcBVcvk.js:17:1680)
+
+t @ afd.hosting.portal.azure.net/azuresupportextension/Content/Dynamic/4tXVsmLXflXY.js:13
+management.azure.com/batch?api-version=2015-11-01:1 Failed to load resource: net::ERR_NAME_NOT_RESOLVED
+/api/ClientTrace:1 Failed to load resource: net::ERR_NETWORK_CHANGED
+/api/ClientTrace:1 Failed to load resource: net::ERR_NAME_NOT_RESOLVED
+/api/ClientTrace:1 Failed to load resource: net::ERR_NAME_NOT_RESOLVED
+/api/ClientTrace:1 Failed to load resource: net::ERR_NETWORK_CHANGED
+DevTools failed to load source map: Could not load content for https://amcdn.msftauth.net/meInlineBackCompat.min.js.map: HTTP error: status code 404, net::ERR_HTTP_RESPONSE_CODE_FAILURE
+DevTools failed to load source map: Could not load content for https://amcdn.msftauth.net/scripts/me/MeControl/10.21153.1/en-US/hollowBootCore.min.js.map: HTTP error: status code 404, net::ERR_HTTP_RESPONSE_CODE_FAILURE
+Navigated to https://portal.azure.com/
+Navigated to https://portal.azure.com/?bundlingKind=DefaultPartitioner&configHash=bXxJthl6PKrJ&env=portal&helppanenewdesign=true&helppanevmproblemcards=false&l=en.en-us&moveresourcesreact=true&pageVersion=8.26.0.55088429.210611-0936&prefetchhome=false&prewarmie=false
+fKt0gvn_BaPN.js:340 Version: 8.26.0.5 (production#d5e0d88429.210611-0936) Signed
+Session: 01e1fe5cf9cf416abc42dc06e6216244
+ee01bb1b-7b25-426d-92f5-207e6491a360:1 Extension: HubsExtension
+ee01bb1b-7b25-426d-92f5-207e6491a360:1 Extension: Microsoft_Azure_CustomerHub
