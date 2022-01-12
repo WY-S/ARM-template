@@ -1,0 +1,231 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+			"defaultValue": "eastus"
+        },
+        "apimName": {
+            "type": "string",
+			"defaultValue": "testapim002"
+        },
+        "organizationName": {
+            "type": "string",
+			"defaultValue": "Microsoft"
+        },
+        "adminEmail": {
+            "type": "string",
+			"defaultValue": "wenyis@wicresoft.com"
+        },
+        "tier": {
+            "type": "string",
+			"defaultValue": "Developer"
+        },
+        "appInsightsName": {
+            "type": "string",
+			"defaultValue": "testapplicat"
+        },
+		"appInsightsInstrumentationKey": {
+            "type": "string",
+			"defaultValue": "101131f4-32e6-4761-9b14-20324e409d92"
+        },
+        "capacity": {
+            "type": "string",
+			"defaultValue": "1"
+        },
+        "virtualNetworkType": {
+            "type": "string",
+			"defaultValue": "Internal"
+        },
+        "vnetResourceGroup": {
+            "type": "string",
+			"defaultValue": "aaa_test"
+        },
+        "vnetName": {
+            "type": "string",
+			"defaultValue": "vnet002"
+        },
+        "subnetName": {
+            "type": "string",
+			"defaultValue": "apimsub"
+        },
+		"deployCustomHostname": {
+            "type": "bool",
+			"defaultValue": true
+		},
+		"hostName": {
+			"type": "string",
+			"defaultValue": "test.sunwenyi.com"
+		},
+		"keyVaultId": {
+			"type": "string",
+			"defaultValue": "https://mytestkvault.vault.azure.net/secrets/test"
+		},
+		"certificateExpiry": {
+			"type": "string",
+			"defaultValue": "2022-01-20T12:02:53+00:00"
+		},
+		"certificateThumbprint": {
+			"type": "string",
+			"defaultValue": "D9205C2C93FE2B023F6689B24D34A7F792AAE0D4"
+		},
+		"certificateSubject": {
+			"type": "string",
+			"defaultValue": "CN=test.sunwenyi.com"
+		}
+    },
+    "variables": {
+        "customPropertiesNonConsumption": {
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Ssl30": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls11": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls10": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2": false
+        },
+        "customPropertiesConsumption": {
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls11": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls10": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30": false,
+            "Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2": false
+        },
+		"defaultHostname": [{
+			"type": "Proxy",
+			"hostName": "[concat(parameters('apimName'), '.azure-api.net')]",
+			"negotiateClientCertificate": false,
+			"defaultSslBinding": false
+		}],
+		"apimHostname": {
+			"apply": "[parameters('deployCustomHostname')]",
+			"value": [{
+                        "type": "Proxy",
+                        "hostName": "[parameters('hostName')]",
+                        "keyVaultId": "[parameters('keyVaultId')]",
+                        "negotiateClientCertificate": false,
+                        "certificate": {
+                            "expiry": "[parameters('certificateExpiry')]",
+                            "thumbprint": "[parameters('certificateThumbprint')]",
+                            "subject": "[parameters('certificateSubject')]"
+                        },
+                        "defaultSslBinding": true
+                    }]
+		},
+		"empty": []
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ApiManagement/service",
+            "apiVersion": "2020-06-01-preview",
+            "name": "[parameters('apimName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('tier')]",
+                "capacity": "[parameters('capacity')]"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+			},
+            "properties": {
+			    "mode": "Incremental",
+                "publisherEmail": "[parameters('adminEmail')]",
+                "publisherName": "[parameters('organizationName')]",
+                "virtualNetworkType": "[parameters('virtualNetworkType')]",
+                "virtualNetworkConfiguration": "[json(concat('{\"subnetResourceId\": \"', resourceId(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName')), '\"}'))]",
+				"hostnameConfigurations": "[union( variables('defaultHostname'), if( variables('apimHostname').apply, variables('apimHostname').value, variables('empty') ))]",
+                "customProperties": "[if(equals(parameters('tier'), 'Consumption'), variables('customPropertiesConsumption'), variables('customPropertiesNonConsumption'))]"
+            }
+        }, 
+		{
+			"type": "Microsoft.ApiManagement/service/loggers",
+			"apiVersion": "2020-06-01-preview",
+			"name": "[concat(parameters('apimName'), '/azuremonitor')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service', parameters('apimName'))]"
+			],
+			"properties": {
+				"loggerType": "azureMonitor",
+				"isBuffered": true
+			}
+		},
+		{
+			"type": "Microsoft.ApiManagement/service/loggers",
+			"apiVersion": "2020-06-01-preview",
+			"name": "[concat(parameters('apimName'), '/' , parameters('appInsightsName'))]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service', parameters('apimName'))]"
+			],
+			"properties": {
+				"loggerType": "applicationInsights",
+				"credentials": {
+					"instrumentationKey": "[parameters('appInsightsInstrumentationKey')]"
+				},
+				"isBuffered": true,
+				"resourceId": "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
+			}
+		},
+		{
+			"type": "Microsoft.ApiManagement/service/diagnostics",
+			"apiVersion": "2020-06-01-preview",
+			"name": "[concat(parameters('apimName'), '/applicationinsights')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service', parameters('apimName'))]",
+				"[resourceId('Microsoft.ApiManagement/service/loggers', parameters('apimName'), parameters('appInsightsName'))]"
+			],
+			"properties": {
+				"alwaysLog": "allErrors",
+				"httpCorrelationProtocol": "Legacy",
+				"logClientIp": true,
+				"loggerId": "[resourceId('Microsoft.ApiManagement/service/loggers', parameters('apimName'), parameters('appInsightsName'))]",
+				"sampling": {
+					"samplingType": "fixed",
+					"percentage": 100
+				}
+			}
+		},
+		{
+			"type": "Microsoft.ApiManagement/service/diagnostics",
+			"apiVersion": "2020-06-01-preview",
+			"name": "[concat(parameters('apimName'), '/azuremonitor')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service', parameters('apimName'))]",
+				"[resourceId('Microsoft.ApiManagement/service/loggers', parameters('apimName'), 'azuremonitor')]"
+			],
+			"properties": {
+				"logClientIp": true,
+				"loggerId": "[resourceId('Microsoft.ApiManagement/service/loggers', parameters('apimName'), 'azuremonitor')]",
+				"sampling": {
+					"samplingType": "fixed",
+					"percentage": 100
+				}
+			}
+		},
+		{
+		  "condition": "[variables('apimHostname').apply]",
+		  "type": "Microsoft.KeyVault/vaults/accessPolicies",
+		  "name": "[concat('cdr-KV01','/add')]",
+		  "apiVersion": "2020-06-01-preview",
+		  "properties": {
+		          "mode": "Incremental",
+			"accessPolicies": [
+			  {
+				"tenantId": "[reference(resourceId('Microsoft.ApiManagement/service', parameters('apimName')), '2019-12-01', 'Full').identity.tenantId]",
+				"objectId": "[reference(resourceId('Microsoft.ApiManagement/service', parameters('apimName')), '2019-12-01', 'Full').identity.principalId]",
+				"permissions": {
+				  "keys": [],
+				  "secrets": [ "get" ],
+				  "certificates": [ "get" ]
+				}
+			  }
+			]
+		  },
+		  "dependsOn": [
+                        "[concat('Microsoft.ApiManagement/service/', parameters('apimName'))]"
+                    ]
+		}
+    ]
+}
