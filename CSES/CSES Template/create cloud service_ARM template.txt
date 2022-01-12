@@ -1,0 +1,196 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "cloudServiceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the cloud service"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of the cloud service"
+      }
+    },
+    "deploymentLabel": {
+      "type": "string",
+      "metadata": {
+        "description": "Label of the deployment"
+      }
+    },
+    "packageSasUri": {
+      "type": "securestring",
+      "metadata": {
+        "description": "SAS Uri of the CSPKG file to deploy"
+      }
+    },
+    "configurationSasUri": {
+      "type": "securestring",
+      "metadata": {
+        "description": "SAS Uri of the service configuration (.cscfg)"
+      }
+    },
+    "roles": {
+      "type": "string",
+      "metadata": {
+        "description": "Roles created in the cloud service application"
+      }
+    },
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "VNet-tile-wus-int-weather-ms",
+      "metadata": {
+        "description": "Name of vitual network"
+      }
+    },
+    "publicIPName": {
+      "type": "string",
+      "defaultValue": "IP-tile-wus-int-weather-ms",
+      "metadata": {
+        "description": "Name of public IP address"
+      }
+    },
+    "upgradeMode": {
+      "type": "string",
+      "defaultValue": "Auto",
+      "metadata": {
+        "UpgradeMode": "UpgradeMode of the CloudService"
+      }
+    }
+  },
+  "variables": {
+    "cloudServiceName": "[parameters('cloudServiceName')]",
+    "subscriptionID": "[subscription().subscriptionId]",
+    "dnsName": "[variables('cloudServiceName')]",
+    "lbName": "[concat(variables('cloudServiceName'), 'LB')]",
+    "lbFEName": "[concat(variables('cloudServiceName'), 'LBFE')]",
+    "resourcePrefix": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', resourceGroup().name, '/providers/')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2019-08-01",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('vnetName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "WebTier",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2019-08-01",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[parameters('publicIPName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 10,
+        "publicIPAddressVersion": "IPv4",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('dnsName')]"
+        }
+      },
+      "sku": {
+        "name": "Basic"
+      }
+    },
+    {
+      "apiVersion": "2021-03-01",
+      "type": "Microsoft.Compute/cloudServices",
+      "name": "[variables('cloudServiceName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "DeploymentLabel": "[parameters('deploymentLabel')]",
+        "DeployFromVisualStudio": "true"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('vnetName'))]",
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPName'))]"
+      ],
+      "properties": {
+        "packageUrl": "[parameters('packageSasUri')]",
+        "configurationUrl": "[parameters('configurationSasUri')]",
+        "upgradeMode": "[parameters('upgradeMode')]",
+        "roleProfile": {
+          "roles": [
+            {
+              "name": "Microsoft.Weather.CacheWebService",
+              "sku": {
+                "name": "Standard_D3_v2",
+                "capacity": "1"
+              }
+            }
+          ]
+        },
+        "networkProfile": {
+          "loadBalancerConfigurations": [
+            {
+              "id": "[concat(variables('resourcePrefix'), 'Microsoft.Network/loadBalancers/', variables('lbName'))]",
+              "name": "[variables('lbName')]",
+              "properties": {
+                "frontendIPConfigurations": [
+                  {
+                    "name": "[variables('lbFEName')]",
+                    "properties": {
+                      "publicIPAddress": {
+                        "id": "[concat(variables('resourcePrefix'), 'Microsoft.Network/publicIPAddresses/', parameters('publicIPName'))]"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "osProfile": {
+          "secrets": [
+            {
+              "sourceVault": {
+                "id": "/subscriptions/f5060b44-875a-43d6-91d0-7d003e2b90bb/resourceGroups/tile-wus-int-weather-ms-Migrated/providers/Microsoft.KeyVault/vaults/KV-tile-wus-int-rpz05taz"
+              },
+              "vaultCertificates": [
+                {
+	  "certificateUrl": "https://kv-tile-wus-int-rpz05taz.vault.azure.net/secrets/A349F467D0DE4A7EF1AD9919FA23168691FF5B3F/bb14a2009b5a44b4801a001a8bfa42b2"
+                },
+                {
+                  "certificateUrl": "https://kv-tile-wus-int-rpz05taz.vault.azure.net/secrets/8F31530709BA4A5F468E7F8D72D7F2033E143EBC/da9bd00bfcc5496fb3566f0b01c796d3"
+                },
+                {
+                  "certificateUrl": "https://kv-tile-wus-int-rpz05taz.vault.azure.net/secrets/4A7866C0FA6EF890246D843C4A4F87FB75D0C15F/b1bfc081ccfe484991a58bd9d93936c5"
+                },
+                {
+                  "certificateUrl": "https://kv-tile-wus-int-rpz05taz.vault.azure.net/secrets/90EC61A7A9838CC7AC8A5317A884163E14F5AE00/98ba9ac07b9b40ea904739f42e78eeee"
+                },
+                {
+                  "certificateUrl": "https://kv-tile-wus-int-rpz05taz.vault.azure.net/secrets/B4C83F74994E87319786EA9A9F5195F075422100/e2eab4d1f0304b1aa67b170fea14f592"
+                },
+                {
+                  "certificateUrl": "https://kv-tile-wus-int-rpz05taz.vault.azure.net/secrets/CE50C5ABB57FF960A0F5EEADDAE05A2E0430EB0A/9206545eb7d74d02a49247ad5747b2cb"
+                },
+                {
+                  "certificateUrl": "https://kv-tile-wus-int-rpz05taz.vault.azure.net/secrets/90B7FE7D42197D15DF442B3F7ADBBEF6A2A04C39/f9e86fe2eeec492db352fca7dc2ca0b3"
+                },
+                {
+                  "certificateUrl": "https://kv-tile-wus-int-rpz05taz.vault.azure.net/secrets/0C73BBC8B0DEB9F285C2CDF1748510254F3955AE/743bd50cfbb54db5a01c271dbd3f6d66"
+                }
+              ]
+            }
+          ]
+        }       
+    }
+   }
+  ]
+}

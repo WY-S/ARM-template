@@ -1,0 +1,169 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "cloudServiceName": {
+      "type": "string",
+	  "defaultValue": "wenyiswappable256",
+      "metadata": {
+        "description": "Name of the cloud service"
+      }
+    },
+    "location": {
+      "type": "string",
+	  "defaultValue": "eastus",
+      "metadata": {
+        "description": "Location of the cloud service"
+      }
+    },
+    "deploymentLabel": {
+      "type": "string",
+	  "defaultValue": "eastdeploymentLabelus",
+      "metadata": {
+        "description": "Label of the deployment"
+      }
+    },
+    "packageSasUri": {
+      "type": "securestring",
+	  "defaultValue": "https://abcdefe.blob.core.windows.net/cstest/sharedcs2.cspkgsp=racwdli&st=2021-12-21T09:51:51Z&se=2021-12-21T17:51:51Z&spr=https&sv=2020-08-04&sr=c&sig=pVgzouvkczv7SecmTjw5lgR1v6aDG4ythzoiYqj4jfk%3D",
+      "metadata": {
+        "description": "SAS Uri of the CSPKG file to deploy"
+      }
+    },
+    "configurationSasUri": {
+      "type": "securestring",
+	  "defaultValue": "https://abcdefe.blob.core.windows.net/cstest/sharedcs2.cscfgsp=racwdli&st=2021-12-21T09:51:51Z&se=2021-12-21T17:51:51Z&spr=https&sv=2020-08-04&sr=c&sig=pVgzouvkczv7SecmTjw5lgR1v6aDG4ythzoiYqj4jfk%3D",
+      "metadata": {
+        "description": "SAS Uri of the service configuration (.cscfg)"
+      }
+    },
+    "roles": {
+      "type": "string",
+      "metadata": {
+        "description": "Roles created in the cloud service application"
+      }
+    },
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "wenyivnet-for-cses",
+      "metadata": {
+        "description": "Name of vitual network"
+      }
+    },
+    "publicIPName": {
+      "type": "string",
+      "defaultValue": "IP-wenyi-cses",
+      "metadata": {
+        "description": "Name of public IP address"
+      }
+    },
+    "upgradeMode": {
+      "type": "string",
+      "defaultValue": "Auto",
+      "metadata": {
+        "UpgradeMode": "UpgradeMode of the CloudService"
+      }
+    }
+  },
+  "variables": {
+    "cloudServiceName": "[parameters('cloudServiceName')]",
+    "subscriptionID": "[subscription().subscriptionId]",
+    "dnsName": "[variables('cloudServiceName')]",
+    "lbName": "[concat(variables('cloudServiceName'), 'LB')]",
+    "lbFEName": "[concat(variables('cloudServiceName'), 'LBFE')]",
+    "resourcePrefix": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', resourceGroup().name, '/providers/')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2019-08-01",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('vnetName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "WebTier",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2019-08-01",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[parameters('publicIPName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 10,
+        "publicIPAddressVersion": "IPv4",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('dnsName')]"
+        }
+      },
+      "sku": {
+        "name": "Basic"
+      }
+    },
+    {
+      "apiVersion": "2021-03-01",
+      "type": "Microsoft.Compute/cloudServices",
+      "name": "[variables('cloudServiceName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "DeploymentLabel": "[parameters('deploymentLabel')]",
+        "DeployFromVisualStudio": "true"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('vnetName'))]",
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPName'))]"
+      ],
+      "properties": {
+        "packageUrl": "[parameters('packageSasUri')]",
+        "configurationUrl": "[parameters('configurationSasUri')]",
+        "upgradeMode": "[parameters('upgradeMode')]",
+        "roleProfile": {
+          "roles": [
+            {
+              "name": "WebRole1",
+              "sku": {
+                "name": "Standard_D3_v2",
+                "capacity": "1"
+              }
+            }
+          ]
+        },
+        "networkProfile": {
+			 "SwappableCloudService": {
+              "id": "/subscriptions/4f27bec7-26bd-40f7-af24-5962a53d921e/resourceGroups/SHAREDCSES/providers/Microsoft.Compute/cloudServices/sharedcses"
+            },
+          "loadBalancerConfigurations": [
+            {
+              "id": "[concat(variables('resourcePrefix'), 'Microsoft.Network/loadBalancers/', variables('lbName'))]",
+              "name": "[variables('lbName')]",
+              "properties": {
+                "frontendIPConfigurations": [
+                  {
+                    "name": "[variables('lbFEName')]",
+                    "properties": {
+                      "publicIPAddress": {
+                        "id": "[concat(variables('resourcePrefix'), 'Microsoft.Network/publicIPAddresses/', parameters('publicIPName'))]"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }       
+    }
+   }
+  ]
+}

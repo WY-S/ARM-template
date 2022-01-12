@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "cloudServices_testcseswenyi_name": {
+            "value": null
+        },
+        "publicIPAddresses_testcseswenyiIP_externalid": {
+            "value": null
+        },
+        "cloudServices_sharedcses_externalid": {
+            "value": null
+        }
+    }
+}
